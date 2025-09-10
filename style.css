@@ -20,3 +20,22 @@ footer {
   align-items: center;
   gap: 1rem;
 }
+
+.board {
+  width: 300px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0;
+}
+
+.cell {
+  border: 1px solid darkgray;
+  width: 100px;
+  height: 100px;
+}
+.cell:hover {
+  background-color: lightgray;
+  cursor: pointer;
+  transition: 300ms ease-in-out;
+}
