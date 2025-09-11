@@ -2,12 +2,12 @@
 let player1Input = document.querySelector("#player-1");
 let player2Input = document.querySelector("#player-2");
 const createPlayersBtn = document.querySelector("#create-players");
-// const player1Name = document.querySelector("#player-1-name");
-// const player2Name = document.querySelector("#player-2-name");
 const list = document.querySelector(".list");
+const board = document.querySelector(".board");
 
 //=========================Event Listeners===================
 
+//Create players button
 createPlayersBtn.addEventListener("click", () => {
   list.innerHTML = "";
   gamePlayers.addPlayer(player1Input.value);
@@ -23,7 +23,16 @@ createPlayersBtn.addEventListener("click", () => {
   clearInputs();
 });
 
+//Board Cells
+
+board.addEventListener("click", (event) => {
+  if (!event.target.classList.contains("cell")) return;
+  console.log(event.target.id);
+});
+
 //=========================Factory Functions=================
+
+// Player Factory
 const gamePlayers = (function players() {
   const players = [];
 
@@ -44,10 +53,19 @@ const gamePlayers = (function players() {
   return { addPlayer, getPlayers };
 })();
 
-function gameBoard() {}
 function flow() {}
 
 function clearInputs() {
   player1Input.value = "";
   player2Input.value = "";
 }
+
+//Board Module
+const boardCells = (function gameBoard() {
+  for (let i = 0; i < 9; i++) {
+    const square = document.createElement("div");
+    square.classList.add("cell");
+    square.setAttribute("id", `cell-${i + 1}`);
+    board.appendChild(square);
+  }
+})();

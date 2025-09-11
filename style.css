@@ -1,12 +1,11 @@
 body {
-  margin: 0;
-  padding: 0;
   font-size: 18px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   height: 100dvh;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 header {
@@ -22,17 +21,19 @@ footer {
 }
 
 .board {
-  width: 300px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 0;
+  gap: 2px;
+  background-color: darkgray;
+  border: 1px solid darkgray;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .cell {
-  border: 1px solid darkgray;
-  width: 100px;
-  height: 100px;
+  background-color: white;
+  width: 6rem;
+  height: 6rem;
 }
 .cell:hover {
   background-color: lightgray;
