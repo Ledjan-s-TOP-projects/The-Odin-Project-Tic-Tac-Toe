@@ -4,6 +4,7 @@ let player2Input = document.querySelector("#player-2");
 const createPlayersBtn = document.querySelector("#create-players");
 const list = document.querySelector(".list");
 const board = document.querySelector(".board");
+const header = document.querySelector("#game-header");
 
 //=========================Event Listeners===================
 
@@ -16,22 +17,21 @@ createPlayersBtn.addEventListener("click", () => {
 
   listOfPlayers.forEach((player, index) => {
     const playerName = document.createElement("p");
-    playerName.textContent = `Player ${index + 1}: ${player}`;
+    playerName.textContent = `Player ${index + 1}: ${player.name}`;
     list.appendChild(playerName);
   });
 
-  clearInputs();
+  gamePlayers.clearInputs();
+  header.appendChild(startRoundBtn);
 });
 
-//Board Cells
-
-board.addEventListener("click", (event) => {
-  if (!event.target.classList.contains("cell")) return;
-  console.log(event.target.id);
-});
+//Start game round button
+const startRoundBtn = document.createElement("button");
+startRoundBtn.textContent = "Start";
+startRoundBtn.setAttribute("id", "startBtn");
+startRoundBtn.addEventListener("click", () => gamePlay.gameRound());
 
 //=========================Factory Functions=================
-
 // Player Factory
 const gamePlayers = (function players() {
   const players = [];
@@ -48,24 +48,70 @@ const gamePlayers = (function players() {
     }
   };
 
-  const getPlayers = () => players.map((player) => player.name);
+  const getPlayers = () => [...players];
 
-  return { addPlayer, getPlayers };
+  const clearInputs = () => {
+    player1Input.value = "";
+    player2Input.value = "";
+  };
+
+  return { addPlayer, getPlayers, clearInputs };
+})();
+//=====dummy players
+// gamePlayers.addPlayer("John");
+// gamePlayers.addPlayer("Max");
+
+//============================================================
+// Game Flow Factory
+const gamePlay = (function gameflow() {
+  let players;
+  let currentPlayer;
+  const boardState = Array(9).fill("");
+  const maxRoundNumber = 3;
+  let roundNumber = 1;
+  let setResult = {};
+  let gameResult = {};
+  board.addEventListener("click", handleCellClicks);
+
+  function handleCellClicks(event) {
+    if (!event.target.classList.contains("cell")) return; //Check if a cell is clicked
+    if (event.target.textContent !== "") return; //Check if a cell is empty
+    boardState[event.target.id] = currentPlayer.symbol; //update the array board state with the player symbol
+    event.target.textContent = currentPlayer.symbol; //update cell on the display
+    togglePlayer();
+  }
+  const togglePlayer = () => {
+    currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
+  };
+
+  const gameRound = () => {
+    if (roundNumber > maxRoundNumber) return;
+    players = gamePlayers.getPlayers();
+    currentPlayer = players[0];
+
+    declareSetWinner();
+    declareGameWinner();
+    roundNumber++;
+  };
+
+  const declareSetWinner = () => {};
+  const declareGameWinner = () => {};
+
+  const resetGame = () => {};
+  return { gameRound, declareSetWinner, declareGameWinner, resetGame };
 })();
 
-function flow() {}
+//============================================================
+// dummy round
+// gamePlay.gameRound();
 
-function clearInputs() {
-  player1Input.value = "";
-  player2Input.value = "";
-}
-
+//============================================================
 //Board Module
 const boardCells = (function gameBoard() {
   for (let i = 0; i < 9; i++) {
     const square = document.createElement("div");
     square.classList.add("cell");
-    square.setAttribute("id", `cell-${i + 1}`);
+    square.setAttribute("id", i);
     board.appendChild(square);
   }
 })();
