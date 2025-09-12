@@ -7,6 +7,7 @@ const list = document.querySelector(".list");
 const board = document.querySelector(".board");
 const header = document.querySelector("#game-header");
 let cell;
+const currentPlayerDisplay = document.querySelector("#current-player");
 
 const resultDialog = document.querySelector("#declare-winner");
 const setWinner = document.querySelector("#set-result");
@@ -47,8 +48,8 @@ const gamePlayers = (function players() {
 const gamePlay = (function gameflow() {
   let players = [];
   let currentPlayer;
-  const X = [];
-  const O = [];
+  let X = [];
+  let O = [];
   const maxRoundNumber = 3;
   let roundNumber = 1;
   const winningCombo = [
@@ -78,6 +79,7 @@ const gamePlay = (function gameflow() {
     checkSetWinner();
     declareGameWinner();
     togglePlayer();
+    currentPlayerDisplay.textContent = currentPlayer.name;
   }
 
   const togglePlayer = () => {
@@ -120,6 +122,9 @@ const gamePlay = (function gameflow() {
 
   const restartSet = () => {
     resultDialog.close();
+    X = [];
+    O = [];
+    currentPlayer = players[0];
     boardCells.getCells();
     cell.forEach((cell) => {
       cell.textContent = "";
