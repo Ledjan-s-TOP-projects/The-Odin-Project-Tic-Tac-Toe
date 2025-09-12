@@ -121,9 +121,9 @@ const gamePlay = (function gameflow() {
       );
 
     if (hasWinningCombo(X)) {
-      console.log(`${players[0].name} wins this set`);
+      console.log(`${player1.name} wins this set`);
     } else if (hasWinningCombo(O)) {
-      console.log(`${players[1].name} wins this set`);
+      console.log(`${player2.name} wins this set`);
     }
     //the draw condition should be here
   };
