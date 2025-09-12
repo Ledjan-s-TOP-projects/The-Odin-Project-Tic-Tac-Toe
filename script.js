@@ -58,7 +58,8 @@ const gamePlayers = (function players() {
 const gamePlay = (function gameflow() {
   let players = [];
   let currentPlayer;
-  const boardState = Array(9).fill("");
+  const X = [];
+  const O = [];
   const maxRoundNumber = 3;
   let roundNumber = 1;
   const winningCombo = [
@@ -76,10 +77,18 @@ const gamePlay = (function gameflow() {
   startRoundBtn.addEventListener("click", handleStartBtnClick);
 
   function handleCellClicks(event) {
+    let idNumber = Number(event.target.id);
     if (!event.target.classList.contains("cell")) return; //Check if a cell is clicked
     if (event.target.textContent !== "") return; //Check if a cell is empty
-    boardState[event.target.id] = currentPlayer.symbol; //update the array board state with the player symbol
+    if (currentPlayer.symbol === "X") {
+      X.push(idNumber);
+    } else {
+      O.push(idNumber);
+    }
     event.target.textContent = currentPlayer.symbol; //update cell on the display
+
+    checkSetWinner();
+    declareGameWinner();
     togglePlayer();
   }
 
@@ -98,20 +107,33 @@ const gamePlay = (function gameflow() {
     if (roundNumber > maxRoundNumber) return;
     players = gamePlayers.getPlayers();
     currentPlayer = players[0];
-
-    declareSetWinner();
-    declareGameWinner();
     roundNumber++;
   };
 
-  const declareSetWinner = () => {};
+  const checkSetWinner = () => {
+    const [player1, player2] = gamePlayers.getPlayers();
+
+    const hasWinningCombo = (playerMoves) =>
+      //Does at least one winning combo exists?
+      winningCombo.some((combo) =>
+        //Are all three indexes of this combo included in the array moves of this player
+        combo.every((index) => playerMoves.includes(index))
+      );
+
+    if (hasWinningCombo(X)) {
+      console.log(`${players[0].name} wins this set`);
+    } else if (hasWinningCombo(O)) {
+      console.log(`${players[1].name} wins this set`);
+    }
+    //the draw condition should be here
+  };
 
   const declareGameWinner = () => {};
 
   const resetGame = () => {};
   return {
     gameRound,
-    declareSetWinner,
+    checkSetWinner,
     declareGameWinner,
     resetGame,
   };
