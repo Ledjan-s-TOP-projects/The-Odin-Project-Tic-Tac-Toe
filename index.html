@@ -9,7 +9,8 @@
   <body>
     <header id="game-header">
       <h1>Tic Tac Toe</h1>
-
+      <!-- Initiate players -->
+      <dialog></dialog>
       <div class="player">
         <label for="player-1">Player 1</label>
         <input
@@ -30,11 +31,22 @@
         />
       </div>
       <button class="btn" id="create-players">Create Players</button>
-      <button class="btn" id="startBtn">Start</button>
+
+      <!-- Start set 1 and restart set 2 and 3 -->
+      <!-- <button class="btn" id="startBtn">Start</button> -->
 
       <div class="list"></div>
     </header>
     <div class="board"></div>
+    <!-- Declare Winner of the set and game -->
+    <dialog id="declare-winner">
+      <h2 id="set-result"></h2>
+      <div id="game-result">
+        <h3 class="result" id="p1-result"></h3>
+        <h3 class="result" id="p2-result"></h3>
+      </div>
+      <h2 id="game-result"></h2>
+    </dialog>
     <footer>
       <p>
         Created by <a href="https://www.ledjanmicani.info/">Ledjan Micani</a>

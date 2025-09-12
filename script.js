@@ -7,6 +7,12 @@ const list = document.querySelector(".list");
 const board = document.querySelector(".board");
 const header = document.querySelector("#game-header");
 
+const resultDialog = document.querySelector("#declare-winner");
+const setWinner = document.querySelector("#set-result");
+const p1Result = document.querySelector("#p1-result");
+const p2Result = document.querySelector("#p2-result");
+const winner = document.querySelector("#game-result");
+
 //=========================Event Listeners===================
 
 //Create players button
@@ -20,10 +26,12 @@ createPlayersBtn.addEventListener("click", () => {
     const playerName = document.createElement("p");
     playerName.textContent = `Player ${index + 1}: ${player.name}`;
     list.appendChild(playerName);
+    gamePlay.gameRound();
+    if (!players || players.length < 2) return;
+    board.addEventListener("click", gamePlay.handleCellClicks);
   });
 
   gamePlayers.clearInputs();
-  header.appendChild(startRoundBtn);
 });
 
 //=========================Factory Functions=================
@@ -74,7 +82,6 @@ const gamePlay = (function gameflow() {
   ];
   let setResult = {};
   let gameResult = {};
-  startRoundBtn.addEventListener("click", handleStartBtnClick);
 
   function handleCellClicks(event) {
     let idNumber = Number(event.target.id);
@@ -96,18 +103,10 @@ const gamePlay = (function gameflow() {
     currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
   };
 
-  function handleStartBtnClick() {
-    players = gamePlayers.getPlayers();
-    if (!players || players.length < 2) return;
-    board.addEventListener("click", handleCellClicks);
-    gamePlay.gameRound();
-  }
-
   const gameRound = () => {
     if (roundNumber > maxRoundNumber) return;
     players = gamePlayers.getPlayers();
     currentPlayer = players[0];
-    roundNumber++;
   };
 
   const checkSetWinner = () => {
@@ -121,12 +120,19 @@ const gamePlay = (function gameflow() {
       );
 
     if (hasWinningCombo(X)) {
+      resultDialog.showModal();
+      setWinner.textContent = `${player1.name} wins this set`;
       console.log(`${player1.name} wins this set`);
     } else if (hasWinningCombo(O)) {
+      resultDialog.showModal();
+      setWinner.textContent = `${player2.name} wins this set`;
       console.log(`${player2.name} wins this set`);
     } else if (X.length === 5 && !hasWinningCombo(X)) {
+      resultDialog.showModal();
+      setWinner.textContent = "It's a draw";
       console.log("It's a draw");
     }
+    roundNumber++;
   };
 
   const declareGameWinner = () => {};
@@ -137,6 +143,7 @@ const gamePlay = (function gameflow() {
     checkSetWinner,
     declareGameWinner,
     resetGame,
+    handleCellClicks,
   };
 })();
 
