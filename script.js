@@ -6,33 +6,14 @@ const startRoundBtn = document.querySelector("#startBtn");
 const list = document.querySelector(".list");
 const board = document.querySelector(".board");
 const header = document.querySelector("#game-header");
+let cell;
 
 const resultDialog = document.querySelector("#declare-winner");
 const setWinner = document.querySelector("#set-result");
 const p1Result = document.querySelector("#p1-result");
 const p2Result = document.querySelector("#p2-result");
 const winner = document.querySelector("#game-result");
-
-//=========================Event Listeners===================
-
-//Create players button
-createPlayersBtn.addEventListener("click", () => {
-  list.innerHTML = "";
-  gamePlayers.addPlayer(player1Input.value);
-  gamePlayers.addPlayer(player2Input.value);
-  const players = gamePlayers.getPlayers();
-
-  players.forEach((player, index) => {
-    const playerName = document.createElement("p");
-    playerName.textContent = `Player ${index + 1}: ${player.name}`;
-    list.appendChild(playerName);
-    gamePlay.gameRound();
-    if (!players || players.length < 2) return;
-    board.addEventListener("click", gamePlay.handleCellClicks);
-  });
-
-  gamePlayers.clearInputs();
-});
+const restartBtn = document.querySelector("#restart");
 
 //=========================Factory Functions=================
 // Player Factory
@@ -137,17 +118,50 @@ const gamePlay = (function gameflow() {
 
   const declareGameWinner = () => {};
 
-  const resetGame = () => {};
+  const restartSet = () => {
+    resultDialog.close();
+    boardCells.getCells();
+    cell.forEach((cell) => {
+      cell.textContent = "";
+    });
+    gameRound();
+  };
+
+  const restartGame = () => {};
   return {
     gameRound,
-    checkSetWinner,
-    declareGameWinner,
-    resetGame,
     handleCellClicks,
+    checkSetWinner,
+    restartSet,
+    declareGameWinner,
+    restartGame,
   };
 })();
 
 //============================================================
+//=========================Event Listeners===================
+
+//Create players button
+createPlayersBtn.addEventListener("click", () => {
+  list.innerHTML = "";
+  gamePlayers.addPlayer(player1Input.value);
+  gamePlayers.addPlayer(player2Input.value);
+  const players = gamePlayers.getPlayers();
+
+  players.forEach((player, index) => {
+    const playerName = document.createElement("p");
+    playerName.textContent = `Player ${index + 1}: ${player.name}`;
+    list.appendChild(playerName);
+    gamePlay.gameRound();
+    if (!players || players.length < 2) return;
+    board.addEventListener("click", gamePlay.handleCellClicks);
+  });
+
+  gamePlayers.clearInputs();
+});
+
+//Restart button
+restartBtn.addEventListener("click", gamePlay.restartSet);
 
 //============================================================
 //Board Module
@@ -158,4 +172,10 @@ const boardCells = (function gameBoard() {
     square.setAttribute("id", i);
     board.appendChild(square);
   }
+
+  const getCells = () => {
+    return (cell = document.querySelectorAll(".cell"));
+  };
+
+  return { getCells };
 })();
