@@ -124,8 +124,9 @@ const gamePlay = (function gameflow() {
       console.log(`${player1.name} wins this set`);
     } else if (hasWinningCombo(O)) {
       console.log(`${player2.name} wins this set`);
+    } else if (X.length === 5 && !hasWinningCombo(X)) {
+      console.log("It's a draw");
     }
-    //the draw condition should be here
   };
 
   const declareGameWinner = () => {};
