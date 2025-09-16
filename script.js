@@ -34,12 +34,16 @@ const gamePlayers = (function players() {
 
   const getPlayers = () => [...players];
 
+  const resetPlayers = () => {
+    players.length = 0;
+  };
+
   const clearInputs = () => {
     player1Input.value = "";
     player2Input.value = "";
   };
 
-  return { addPlayer, getPlayers, clearInputs };
+  return { addPlayer, getPlayers, clearInputs, resetPlayers };
 })();
 
 //============================================================
@@ -82,11 +86,13 @@ const gamePlay = (function gameflow() {
       O.push(idNumber);
     }
     event.target.textContent = currentPlayer.symbol; //update cell on the display
-
     checkSetWinner();
-    declareGameWinner();
-    togglePlayer();
-    currentPlayerDisplay.textContent = currentPlayer.name;
+    if (setResult[0].p1 === maxPoints || setResult[1].p2 === maxPoints) {
+      declareGameWinner();
+    } else {
+      togglePlayer();
+      currentPlayerDisplay.textContent = currentPlayer.name;
+    }
   }
 
   //Toggle players & assign turns
@@ -96,8 +102,6 @@ const gamePlay = (function gameflow() {
 
   //Checks and declares the winner of the set
   const checkSetWinner = () => {
-    if (setResult[0].p1 === maxPoints || setResult[1].p2 === maxPoints) return;
-
     const [player1, player2] = gamePlayers.getPlayers();
 
     const hasWinningCombo = (playerMoves) =>
@@ -108,17 +112,23 @@ const gamePlay = (function gameflow() {
       );
 
     if (hasWinningCombo(X)) {
-      resultDialog.showModal();
-      setWinner.textContent = `${player1.name} wins this set`;
       setResult[0].p1++;
+      resultDialog.showModal();
+      winner.textContent = `${player1.name} wins this round`;
     } else if (hasWinningCombo(O)) {
-      resultDialog.showModal();
-      setWinner.textContent = `${player2.name} wins this set`;
       setResult[1].p2++;
-    } else if (X.length === 5 && !hasWinningCombo(X)) {
       resultDialog.showModal();
-      setWinner.textContent = "It's a draw";
+      winner.textContent = `${player2.name} wins this round`;
+    } else if (
+      X.length + O.length === 9 &&
+      !hasWinningCombo(X) &&
+      !hasWinningCombo(O)
+    ) {
+      resultDialog.showModal();
+      winner.textContent = "It's a draw";
     }
+
+    restartBtn.textContent = "Next Round";
   };
 
   //Checks and declares the winner of the game
@@ -129,6 +139,8 @@ const gamePlay = (function gameflow() {
     } else if (setResult[1].p2 === maxPoints) {
       winner.textContent = `${player2.name} has won the game`;
     }
+
+    restartBtn.textContent = "Restart Game";
   };
 
   const restartSet = () => {
@@ -136,6 +148,7 @@ const gamePlay = (function gameflow() {
     X = [];
     O = [];
     currentPlayer = players[0];
+    currentPlayerDisplay.textContent = players[0].name;
     boardCells.getCells();
     cell.forEach((cell) => {
       cell.textContent = "";
@@ -144,11 +157,24 @@ const gamePlay = (function gameflow() {
   };
 
   const restartGame = () => {
-    restartSet();
+    resultDialog.close();
+    gamePlayers.resetPlayers();
+    X = [];
+    O = [];
+    currentPlayer = null;
+    boardCells.getCells();
+    cell.forEach((cell) => {
+      cell.textContent = "";
+    });
     setResult[0].p1 = 0;
     setResult[1].p2 = 0;
-    players = [];
+    list.innerHTML = "";
+    currentPlayerDisplay.innerHTML = "";
+    p1Result.innerHTML = "";
+    p2Result.innerHTML = "";
   };
+
+  const getResult = () => setResult;
 
   return {
     gameRound,
@@ -157,6 +183,7 @@ const gamePlay = (function gameflow() {
     restartSet,
     declareGameWinner,
     restartGame,
+    getResult,
   };
 })();
 
@@ -169,6 +196,7 @@ createPlayersBtn.addEventListener("click", () => {
   gamePlayers.addPlayer(player1Input.value);
   gamePlayers.addPlayer(player2Input.value);
   const players = gamePlayers.getPlayers();
+  currentPlayerDisplay.textContent = players[0].name;
 
   players.forEach((player, index) => {
     const playerName = document.createElement("p");
@@ -181,9 +209,6 @@ createPlayersBtn.addEventListener("click", () => {
 
   gamePlayers.clearInputs();
 });
-
-//Restart button
-restartBtn.addEventListener("click", gamePlay.restartSet);
 
 //============================================================
 //Board Module
@@ -201,3 +226,12 @@ const boardCells = (function gameBoard() {
 
   return { getCells };
 })();
+
+//============================================================
+//Restart button listener
+restartBtn.addEventListener("click", () => {
+  const result = gamePlay.getResult();
+  result[0].p1 === 3 || result[1].p2 === 3
+    ? gamePlay.restartGame()
+    : gamePlay.restartSet();
+});
