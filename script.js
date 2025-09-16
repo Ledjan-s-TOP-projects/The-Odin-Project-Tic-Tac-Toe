@@ -8,7 +8,6 @@ const board = document.querySelector(".board");
 const header = document.querySelector("#game-header");
 let cell;
 const currentPlayerDisplay = document.querySelector("#current-player");
-
 const resultDialog = document.querySelector("#declare-winner");
 const setWinner = document.querySelector("#set-result");
 const p1Result = document.querySelector("#p1-result");
@@ -46,12 +45,11 @@ const gamePlayers = (function players() {
 //============================================================
 // Game Flow Factory
 const gamePlay = (function gameflow() {
+  //variables
   let players = [];
   let currentPlayer;
   let X = [];
   let O = [];
-  const maxRoundNumber = 3;
-  let roundNumber = 1;
   const winningCombo = [
     [0, 1, 2],
     [3, 4, 5],
@@ -62,9 +60,18 @@ const gamePlay = (function gameflow() {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  let setResult = {};
-  let gameResult = {};
+  let setResult = [{ p1: 0 }, { p2: 0 }];
+  const maxPoints = 3;
 
+  //Logic for 1 round of the game
+  const gameRound = () => {
+    players = gamePlayers.getPlayers();
+    currentPlayer = players[0];
+    p1Result.textContent = `${players[0].name}: ${setResult[0].p1}`;
+    p2Result.textContent = `${players[1].name}: ${setResult[1].p2}`;
+  };
+
+  //Handle Clicks on the Board
   function handleCellClicks(event) {
     let idNumber = Number(event.target.id);
     if (!event.target.classList.contains("cell")) return; //Check if a cell is clicked
@@ -82,17 +89,15 @@ const gamePlay = (function gameflow() {
     currentPlayerDisplay.textContent = currentPlayer.name;
   }
 
+  //Toggle players & assign turns
   const togglePlayer = () => {
     currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
   };
 
-  const gameRound = () => {
-    if (roundNumber > maxRoundNumber) return;
-    players = gamePlayers.getPlayers();
-    currentPlayer = players[0];
-  };
-
+  //Checks and declares the winner of the set
   const checkSetWinner = () => {
+    if (setResult[0].p1 === maxPoints || setResult[1].p2 === maxPoints) return;
+
     const [player1, player2] = gamePlayers.getPlayers();
 
     const hasWinningCombo = (playerMoves) =>
@@ -105,20 +110,26 @@ const gamePlay = (function gameflow() {
     if (hasWinningCombo(X)) {
       resultDialog.showModal();
       setWinner.textContent = `${player1.name} wins this set`;
-      console.log(`${player1.name} wins this set`);
+      setResult[0].p1++;
     } else if (hasWinningCombo(O)) {
       resultDialog.showModal();
       setWinner.textContent = `${player2.name} wins this set`;
-      console.log(`${player2.name} wins this set`);
+      setResult[1].p2++;
     } else if (X.length === 5 && !hasWinningCombo(X)) {
       resultDialog.showModal();
       setWinner.textContent = "It's a draw";
-      console.log("It's a draw");
     }
-    roundNumber++;
   };
 
-  const declareGameWinner = () => {};
+  //Checks and declares the winner of the game
+  const declareGameWinner = () => {
+    const [player1, player2] = gamePlayers.getPlayers();
+    if (setResult[0].p1 === maxPoints) {
+      winner.textContent = `${player1.name} has won the game`;
+    } else if (setResult[1].p2 === maxPoints) {
+      winner.textContent = `${player2.name} has won the game`;
+    }
+  };
 
   const restartSet = () => {
     resultDialog.close();
@@ -132,7 +143,13 @@ const gamePlay = (function gameflow() {
     gameRound();
   };
 
-  const restartGame = () => {};
+  const restartGame = () => {
+    restartSet();
+    setResult[0].p1 = 0;
+    setResult[1].p2 = 0;
+    players = [];
+  };
+
   return {
     gameRound,
     handleCellClicks,
