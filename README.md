@@ -16,8 +16,11 @@ A web-based Tic Tac Toe game built with **HTML, CSS, and JavaScript** as part of
 - **Stylish UI**:
   - Material Design-inspired shadows.
   - Blurred backdrop for dialog boxes.
-  - Responsive and visually appealing layout.
 - **Self-hosted Google Font** for consistent typography.
+
+## Next phase
+
+- **Rensponsive design**: Adjust design for mobile devices
 
 ---
 
