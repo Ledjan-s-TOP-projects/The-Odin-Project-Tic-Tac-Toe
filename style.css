@@ -93,8 +93,8 @@ body {
 }
 
 .container {
-  width: 90rem;
-  height: 90rem;
+  width: 80rem;
+  height: 80rem;
   background-color: var(--secondary-color);
   border-radius: 50px;
   display: flex;
@@ -136,7 +136,7 @@ body {
 
 .game-board-container {
   width: 30rem;
-  height: 40rem;
+  height: 35rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
