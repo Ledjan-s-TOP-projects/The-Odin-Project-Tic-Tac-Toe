@@ -8,46 +8,64 @@
   </head>
   <body>
     <header id="game-header">
-      <h1>Tic Tac Toe</h1>
       <!-- Initiate players -->
-      <dialog></dialog>
-      <div>
-        <div class="player">
-          <label for="player-1">Player 1</label>
-          <input
-            type="text"
-            name="player-1"
-            id="player-1"
-            placeholder="Enter player's 1 name"
-          />
-        </div>
+      <dialog id="create-players-dialog">
+        <div>
+          <div class="player">
+            <label for="player-1">Player 1</label>
+            <input
+              type="text"
+              name="player-1"
+              id="player-1"
+              placeholder="Enter player's 1 name"
+            />
+          </div>
 
-        <div class="player">
-          <label for="player-2">Player 2</label>
-          <input
-            type="text"
-            name="player-2"
-            id="player-2"
-            placeholder="Enter player's 2 name"
-          />
+          <div class="player">
+            <label for="player-2">Player 2</label>
+            <input
+              type="text"
+              name="player-2"
+              id="player-2"
+              placeholder="Enter player's 2 name"
+            />
+          </div>
+          <button class="btn" id="create-players">Create Players</button>
         </div>
-        <button class="btn" id="create-players">Create Players</button>
+      </dialog>
+    </header>
+
+    <!-- Current player's turn -->
+    <div id="current-player"></div>
+
+    <!-- Game Board -->
+    <div class="container">
+      <div id="game-title">
+        <div class="game-title" id="tic">tic.</div>
+        <div class="game-title" id="tac">tac.</div>
+        <div class="game-title" id="toe">toe.</div>
       </div>
 
-      <div class="list"></div>
-    </header>
-    <div id="current-player"></div>
-    <div>
-      <h3 class="result" id="p1-result"></h3>
-      <h3 class="result" id="p2-result"></h3>
+      <div class="game-board-container">
+        <!--  Display Score -->
+        <div id="result">
+          <div class="list"></div>
+          <div class="result">
+            <div class="player-1" id="p1-result"></div>
+            <div class="player-2" id="p2-result"></div>
+          </div>
+        </div>
+        <div class="board"></div>
+      </div>
     </div>
-    <div class="board"></div>
-    <!-- Declare Winner of the set and game -->
+
+    <!-- Declare Winner of the round and game -->
     <dialog id="declare-winner">
       <h2 id="game-result"></h2>
-      <!-- <h2 id="set-result"></h2> -->
       <button id="restart"></button>
     </dialog>
+
+    <!-- Copyright -->
     <footer>
       <p>
         Created by <a href="https://www.ledjanmicani.info/">Ledjan Micani</a>

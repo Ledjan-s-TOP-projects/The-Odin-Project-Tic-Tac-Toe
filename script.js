@@ -1,4 +1,6 @@
 //=========================Queries===========================
+const createPlayersDialog = document.querySelector("#create-players-dialog");
+createPlayersDialog.showModal();
 let player1Input = document.querySelector("#player-1");
 let player2Input = document.querySelector("#player-2");
 const createPlayersBtn = document.querySelector("#create-players");
@@ -24,10 +26,10 @@ const gamePlayers = (function players() {
     if (players.length === 2) {
       throw "Maximum players reached";
     } else if (players.length === 0) {
-      const player = { name, symbol: "X" };
+      const player = { name, symbol: "X", class: "x" };
       players.push(player);
     } else {
-      const player = { name, symbol: "O" };
+      const player = { name, symbol: "O", class: "o" };
       players.push(player);
     }
   };
@@ -71,8 +73,8 @@ const gamePlay = (function gameflow() {
   const gameRound = () => {
     players = gamePlayers.getPlayers();
     currentPlayer = players[0];
-    p1Result.textContent = `${players[0].name}: ${setResult[0].p1}`;
-    p2Result.textContent = `${players[1].name}: ${setResult[1].p2}`;
+    p1Result.textContent = `${setResult[0].p1}`;
+    p2Result.textContent = `${setResult[1].p2}`;
   };
 
   //Handle Clicks on the Board
@@ -86,6 +88,7 @@ const gamePlay = (function gameflow() {
       O.push(idNumber);
     }
     event.target.textContent = currentPlayer.symbol; //update cell on the display
+    event.target.classList.add(currentPlayer.class);
     checkSetWinner();
     if (setResult[0].p1 === maxPoints || setResult[1].p2 === maxPoints) {
       declareGameWinner();
@@ -199,8 +202,11 @@ createPlayersBtn.addEventListener("click", () => {
   currentPlayerDisplay.textContent = players[0].name;
 
   players.forEach((player, index) => {
-    const playerName = document.createElement("p");
-    playerName.textContent = `Player ${index + 1}: ${player.name}`;
+    const playerName = document.createElement("div");
+    playerName.textContent = `${player.symbol} - ${player.name}`;
+    index === 0
+      ? playerName.classList.add("player-1")
+      : playerName.classList.add("player-2");
     list.appendChild(playerName);
     gamePlay.gameRound();
     if (!players || players.length < 2) return;
@@ -208,6 +214,7 @@ createPlayersBtn.addEventListener("click", () => {
   });
 
   gamePlayers.clearInputs();
+  createPlayersDialog.close();
 });
 
 //============================================================

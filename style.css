@@ -1,3 +1,20 @@
+:root {
+  --primary-color: rgba(43, 0, 64, 1);
+  --secondary-color: rgba(90, 30, 118, 1);
+  --hover-color: #c5a0d7;
+  --player-1-color: rgba(114, 207, 249, 1);
+  --player-2-color: rgba(220, 191, 63, 1);
+  --radius: 10px;
+}
+
+@font-face {
+  font-family: "Fredoka";
+  src: url("fonts/Fredoka-Bold.woff2") format("woff2"),
+    url("fonts/Frekoda-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
 body {
   font-size: 18px;
   display: flex;
@@ -5,7 +22,8 @@ body {
   align-items: center;
   justify-content: space-around;
   height: 100dvh;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Fredoka", sans-serif;
+  background-color: var(--hover-color);
 }
 
 header {
@@ -19,28 +37,108 @@ footer {
   gap: 1rem;
 }
 
+.container {
+  width: 60rem;
+  height: 90rem;
+  background-color: var(--secondary-color);
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.14), 0 16px 24px rgba(0, 0, 0, 0.12),
+    0 6px 30px rgba(0, 0, 0, 0.2);
+}
+
+#game-title {
+  display: grid;
+  grid-template-rows: 50px 50px 100px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  padding: 10px;
+}
+
+#game-title div {
+  margin: 0;
+  padding: 0;
+}
+
+.game-title {
+  font-size: 6rem;
+  font-weight: bold;
+}
+
+#tic,
+#toe {
+  color: var(--player-2-color);
+}
+
+#tac {
+  color: var(--player-1-color);
+}
+
+.game-board-container {
+  width: 30rem;
+  height: 40rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color);
+  border-radius: 25px;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.14), 0 16px 24px rgba(0, 0, 0, 0.12),
+    0 6px 30px rgba(0, 0, 0, 0.2);
+}
+
+#result {
+  display: flex;
+}
+
+.player-1 {
+  color: var(--player-1-color);
+}
+
+.player-2 {
+  color: var(--player-2-color);
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 2px;
-  background-color: darkgray;
-  border: 1px solid darkgray;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  justify-items: center;
+  border-radius: var(--radius);
+  gap: 8px;
+  background-color: var(--primary-color);
+  /* border: 1px solid darkgray; */
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.14), 0 16px 24px rgba(0, 0, 0, 0.12),
+    0 6px 30px rgba(0, 0, 0, 0.2);
 }
 
 .cell {
-  background-color: white;
-  width: 6rem;
-  height: 6rem;
+  background-color: var(--secondary-color);
+  width: 5rem;
+  height: 5rem;
+  border-radius: var(--radius);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 4rem;
 }
 
+.cell.x {
+  color: var(--player-1-color);
+}
+
+.cell.o {
+  color: var(--player-2-color);
+}
+
 .cell:hover {
-  background-color: lightgray;
+  background-color: var(--hover-color);
   cursor: pointer;
   transition: 300ms ease-in-out;
 }
