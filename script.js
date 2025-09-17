@@ -88,15 +88,20 @@ const gamePlay = (function gameflow() {
       O.push(idNumber);
     }
     event.target.textContent = currentPlayer.symbol; //update cell on the display
+    event.target.classList.remove("x", "o");
     event.target.classList.add(currentPlayer.class);
     checkSetWinner();
     if (setResult[0].p1 === maxPoints || setResult[1].p2 === maxPoints) {
       declareGameWinner();
     } else {
       togglePlayer();
-      currentPlayerDisplay.textContent = currentPlayer.name;
+      currentPlayerDisplay.textContent = `${currentPlayer.name}'s turn`;
+      currentPlayerDisplay.classList.remove("x", "o");
+      currentPlayerDisplay.classList.add(currentPlayer.class);
     }
   }
+
+  const getCurrentPlayer = () => currentPlayer;
 
   //Toggle players & assign turns
   const togglePlayer = () => {
@@ -151,7 +156,9 @@ const gamePlay = (function gameflow() {
     X = [];
     O = [];
     currentPlayer = players[0];
-    currentPlayerDisplay.textContent = players[0].name;
+    currentPlayerDisplay.textContent = `${players[0].name}'s turn`;
+    currentPlayerDisplay.classList.remove("x", "o");
+    currentPlayerDisplay.classList.add(currentPlayer.class);
     boardCells.getCells();
     cell.forEach((cell) => {
       cell.textContent = "";
@@ -165,6 +172,7 @@ const gamePlay = (function gameflow() {
     X = [];
     O = [];
     currentPlayer = null;
+    currentPlayerDisplay.classList.remove("x", "o");
     boardCells.getCells();
     cell.forEach((cell) => {
       cell.textContent = "";
@@ -187,6 +195,7 @@ const gamePlay = (function gameflow() {
     declareGameWinner,
     restartGame,
     getResult,
+    getCurrentPlayer,
   };
 })();
 
@@ -196,11 +205,21 @@ const gamePlay = (function gameflow() {
 //Create players button
 createPlayersBtn.addEventListener("click", () => {
   list.innerHTML = "";
+  //1.Add players
   gamePlayers.addPlayer(player1Input.value);
   gamePlayers.addPlayer(player2Input.value);
   const players = gamePlayers.getPlayers();
-  currentPlayerDisplay.textContent = players[0].name;
 
+  //2.Start round
+  gamePlay.gameRound();
+
+  //3.Get Current player
+  const currentPlayer = gamePlay.getCurrentPlayer();
+  currentPlayerDisplay.textContent = `${currentPlayer.name}'s turn`;
+  currentPlayerDisplay.classList.remove("x", "o");
+  currentPlayerDisplay.classList.add(currentPlayer.class);
+
+  //3.Display symbol on cells
   players.forEach((player, index) => {
     const playerName = document.createElement("div");
     playerName.textContent = `${player.symbol} - ${player.name}`;
@@ -208,7 +227,7 @@ createPlayersBtn.addEventListener("click", () => {
       ? playerName.classList.add("player-1")
       : playerName.classList.add("player-2");
     list.appendChild(playerName);
-    gamePlay.gameRound();
+
     if (!players || players.length < 2) return;
     board.addEventListener("click", gamePlay.handleCellClicks);
   });
