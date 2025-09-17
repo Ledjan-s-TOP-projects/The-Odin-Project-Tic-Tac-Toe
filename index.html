@@ -10,30 +10,26 @@
     <header id="game-header">
       <!-- Initiate players -->
       <dialog id="create-players-dialog">
-        <div>
-          <div class="player">
-            <label for="player-1">Player 1</label>
-            <input
-              type="text"
-              name="player-1"
-              id="player-1"
-              placeholder="Enter player's 1 name"
-              value="Melda"
-            />
-          </div>
-
-          <div class="player">
-            <label for="player-2">Player 2</label>
-            <input
-              type="text"
-              name="player-2"
-              id="player-2"
-              placeholder="Enter player's 2 name"
-              value="Ledi"
-            />
-          </div>
-          <button class="btn" id="create-players">Create Players</button>
+        <div class="player">
+          <label id="label-1" for="player-1">Player 1</label>
+          <input
+            type="text"
+            name="player-1"
+            id="player-1"
+            placeholder="Enter name"
+          />
         </div>
+
+        <div class="player">
+          <label id="label-2" for="player-2">Player 2</label>
+          <input
+            type="text"
+            name="player-2"
+            id="player-2"
+            placeholder="Enter name"
+          />
+        </div>
+        <button class="btn" id="create-players">Create Players</button>
       </dialog>
     </header>
 
@@ -66,7 +62,7 @@
     <!-- Declare Winner of the round and game -->
     <dialog id="declare-winner">
       <h2 id="game-result"></h2>
-      <button id="restart"></button>
+      <button class="btn" id="restart"></button>
     </dialog>
 
     <!-- Copyright -->

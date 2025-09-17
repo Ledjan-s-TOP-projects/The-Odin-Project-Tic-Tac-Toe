@@ -123,16 +123,21 @@ const gamePlay = (function gameflow() {
       setResult[0].p1++;
       resultDialog.showModal();
       winner.textContent = `${player1.name} wins this round`;
+      winner.classList.remove("x", "o");
+      winner.classList.add(currentPlayer.class);
     } else if (hasWinningCombo(O)) {
       setResult[1].p2++;
       resultDialog.showModal();
       winner.textContent = `${player2.name} wins this round`;
+      winner.classList.remove("x", "o");
+      winner.classList.add(currentPlayer.class);
     } else if (
       X.length + O.length === 9 &&
       !hasWinningCombo(X) &&
       !hasWinningCombo(O)
     ) {
       resultDialog.showModal();
+      winner.classList.remove("x", "o");
       winner.textContent = "It's a draw";
     }
 
@@ -183,6 +188,7 @@ const gamePlay = (function gameflow() {
     currentPlayerDisplay.innerHTML = "";
     p1Result.innerHTML = "";
     p2Result.innerHTML = "";
+    createPlayersDialog.showModal();
   };
 
   const getResult = () => setResult;
